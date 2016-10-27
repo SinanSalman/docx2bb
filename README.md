@@ -7,6 +7,11 @@
 Create BlackBoard (bb) test questions (text) import file from a Microsoft Word *.docx document. Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. ExamFormat-Sample.docx shows a sample exam format for use with docx2bb. More detailed description of the question identification logic can be found below. Unicode-to-ASCII replacement rules from 'docx2bb.json' data file can be optionally applied.
 
 ## Installing doc2bb: ##
+Download docx2bb:
+
+required file: docx2bb.py
+optional file: docx2bb.json
+
 In addition to a working python environment, docx2bb requires python-docx and lxml libraries. 
 To install these libraries, follow the below steps:
 
