@@ -44,7 +44,7 @@ Example:
 		a. Answer
 
 The question identification logic is as followes:
-- if question includes five consecutive ‘_’ characters; it is identified as Fill_in_the_Blank
+- if question includes five consecutive '_' characters; it is identified as Fill_in_the_Blank
 - if question does not have any sub-bullets; it is identified as True/False
 - if question has only one sub-bullet; it is identified as Essay
 - if question has multiple sub-bullets, but only one is in bold; it is identified as Multiple choice
@@ -86,7 +86,7 @@ __version__ = 	"v0.10"
 __date__ = 		"Oct 27, 2016"
 __copyright__ = "Copyright (c)2016 Sinan Salman"
 __license__ = 	"GPLv3"
-__website__	=	""
+__website__	=	"https://bitbucket.org/sinansalman/docx2bb"
 
 ### Initialization #######################################################################
 
