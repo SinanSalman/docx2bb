@@ -44,7 +44,7 @@ Example:
 		a. Answer
 
 The question identification logic is as followes:
-- if question includes five consecutive ‘_’ characters; it is identified as Fill_in_the_Blank
+- if question includes five consecutive '_' characters; it is identified as Fill_in_the_Blank
 - if question does not have any sub-bullets; it is identified as True/False
 - if question has only one sub-bullet; it is identified as Essay
 - if question has multiple sub-bullets, but only one is in bold; it is identified as Multiple choice
