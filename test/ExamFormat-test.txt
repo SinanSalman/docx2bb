@@ -1,0 +1,7 @@
+TF	T/F questions must use bold for the correct answer in the same paragraph. (True / False)	true
+TF	T/F questions must use bold for the correct answer in the same paragraph. (True / False)	false
+FIB	Fill in the blank question _____; must have at blank indicated by at least 5 consecutive '_' characters; may have many possible answers.	Answer 1	Answer 2	Answer 3	Answer 4
+MC	Multiple choice question can have between 3-5 bullet points, with the entire correct answer in bold.	Answer 1 - incorrect	incorrect	Answer 2 - incorrect	incorrect	Answer 3 - correct	correct	Answer 4 - incorrect	incorrect
+MAT	Matching questions must use the following bullet point outlining, which also provides the correct answer for each term:	Statement explaining term A	Term A	Definition of Term B	Term B	Meaning of Term C	Term C	Description of Term D	Term D
+ESS	Essay/short answer question.	Key solution for essay or short answer question (must fit in exactly one bullet point)
+ESS	The below line is for testing Unicode characters:	§ ± ! @ # $ % ^ & * ( ) - _ = + [ { ] } ; : 'test' "test" test's \ | ` ~ , < . > / ?

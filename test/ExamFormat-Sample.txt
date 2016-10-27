@@ -1,0 +1,6 @@
+TF	Humans need food and water to survive. (True / False)	true
+TF	(True / False) Humans need methane gas to survive. 	false
+FIB	To stay healthy one must drink 8 cups of _____ every day.	water	H2O
+MC	Which one of the following animals hops on two legs?	cats	incorrect	dogs	incorrect	Kangaroos	correct	Eagles	incorrect
+MAT	Match the following statements with the corresponding correct definition or term:	Sky color	Blue	firm and stable in shape; not fluid.	Solid	a substance that flows freely but is of constant volume, having a consistency like that of water or oil.	Liquid	an air-like fluid substance which expands freely to fill any space available, irrespective of its quantity.	Gas
+ESS	Discuss the different types of computer operating systems.	There are many types of computer operating systems such as . . .
