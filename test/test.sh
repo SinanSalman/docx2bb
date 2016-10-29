@@ -37,7 +37,7 @@ do
 	echo ""								>> test.log
 
 	name=$(echo $f | cut -f1 -d'.')
-	echo "$>python docxbb.py -v $name.docx" >> test.log
+	echo "$>python docxbb.py $name.docx" >> test.log
 	python ../docx2bb.py "$name.docx"	 	>> test.log
 	diff "$name.txt" "$name.BM.txt"			>> test.log
 done

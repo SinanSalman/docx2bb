@@ -20,6 +20,10 @@ keep your *.docx exam unchanged, but the author assumes no liabilities from use 
 this tool, including if it eats your exam/hw.
 
 Code by Sinan Salman, 2016
+
+Version History:
+27.10.16	0.10	inital release on bitbucket
+29.10.16	0.11	fixed outline level identification issue
 """
 
 HELP_MSG = """Options:
@@ -42,8 +46,8 @@ Windows platforms:
 		
 __app__ = 		"docx2bb.py"
 __author__ = 	"Sinan Salman (sinan.salman[at]gmail.com)"
-__version__ = 	"v0.10"
-__date__ = 		"Oct 27, 2016"
+__version__ = 	"v0.11"
+__date__ = 		"Oct 29, 2016"
 __copyright__ = "Copyright (c)2016 Sinan Salman"
 __license__ = 	"GPLv3"
 __website__	=	"https://bitbucket.org/sinansalman/docx2bb"
@@ -93,18 +97,18 @@ def ProcessCLI():
 	except:
 		TextWidth = 80
 
-	print ('{:} | {:} | {:} | {:} License\nDownload latest version at {:}'.format(__app__,__version__,__date__,__license__,__website__))
+	print ('{:} | {:} | {:} | {:} License\nDownload latest version at {:}\n'.format(__app__,__version__,__date__,__license__,__website__))
 	
 	# handle arguments and load settings from JSON file
 	if len(sys.argv) == 1:
-		print ("\nSyntax:\n\tpython docx2bb.py [options] [docx_filename]")
+		print ("Syntax:\n\tpython docx2bb.py [options] [docx_filename]")
 		print (HELP_MSG)
 		print_Fail ("Missing argument")
 	if '--verbose' in sys.argv or '-v' in sys.argv:
-		print ("\n*** Option: verbose mode")
+		print ("*** Option: verbose mode")
 		verbose = True
 	if '--help' in sys.argv or '-h' in sys.argv:
-		print("\nSyntax:\n\tpython docx2bb.py [options] [docx_filename]")
+		print("Syntax:\n\tpython docx2bb.py [options] [docx_filename]")
 		print(HELP_MSG)
 		sys.exit(0)
 	WordFileName = sys.argv[-1]
@@ -135,27 +139,17 @@ def RunScript():
 	global Data
 	if verbose: print ("Found {:} paragraphs, parsing and converting unicode to ascii...".format(len(doc.paragraphs)))
 	for p in doc.paragraphs:
-		temp={'text':u2a(p.text),'left_indent':0,'allBold':False,'trueBold':False,'falseBold':False,'list':False}
-		if p.paragraph_format.left_indent != None:
-			temp['left_indent'] = p.paragraph_format.left_indent
-		elif p.style.paragraph_format.left_indent != None:
-			temp['left_indent'] = p.style.paragraph_format.left_indent
+		temp={'text':u2a(p.text),'outline':0,'allBold':False,'trueBold':False,'falseBold':False,'list':False}
 		bold = True
 		for r in p.runs:
 			if r.bold == None: bold = False
 			if r.bold == True and r.text.strip(' ').lower() == 'true': 	temp['trueBold'] = True
 			if r.bold == True and r.text.strip(' ').lower() == 'false': temp['falseBold'] = True
 		temp['allBold'] = bold
-		temp['list'] = isList(p.style)
+		temp['list'], temp['outline'] = GetListOutline(p)
 		temp['Q'] = 0
 		data.append(temp)
-
-	# create an outline level field
-	indent_seq = list(set([x['left_indent'] for x in data]))
-	indent_seq.sort()
-	for i in range(len(data)):
-		data[i]['outline'] = indent_seq.index(data[i]['left_indent'])
-
+		
 	if verbose: print_data_table('Before clean up:') # print data object for debugging
 
 	if verbose:	print ('\nClean up:')	
@@ -221,6 +215,28 @@ def RunScript():
 	if QuestionTypes['Warning'] >0:
 		print ('\t{:8}: {:3}'.format('Warning',QuestionTypes['Warning']))
 	
+def GetListOutline(p):
+	"""get if paragraph is a list adnd if so its outline level"""
+	
+	lst = False
+	lvl = 0
+	if hasattr(p.paragraph_format.element.pPr, 'numPr'):
+		if hasattr(p.paragraph_format.element.pPr.numPr, 'ilvl'):
+			lst = True
+			if p.paragraph_format.element.pPr.numPr.ilvl != None:
+				lvl = p.paragraph_format.element.pPr.numPr.ilvl.val + 1
+			else:
+				lvl = 1
+	if lst == False and lvl == 0:
+		if hasattr(p.style.paragraph_format.element.pPr, 'numPr'):
+			if hasattr(p.style.paragraph_format.element.pPr.numPr, 'ilvl'):
+				lst = True
+				if p.style.paragraph_format.element.pPr.numPr.ilvl != None:
+					lvl = p.paragraph_format.element.pPr.numPr.ilvl.val + 1
+				else:
+					lvl = 1
+	return lst, lvl
+
 def make_Q(Qid, start, end):
 	"""Convert data to Blackboard import file format"""
 
@@ -229,25 +245,27 @@ def make_Q(Qid, start, end):
 	
 	Qid += 1
 
-	if re.search('_{5,}',data[start]['text']) != None:	# Fill In the Blank question
-		BBtext += "\nFIB\t{:}".format(data[start]['text'])
-		for i in range(start+1,end+1): # range does not include the end value, so +1 is needed
-			BBtext += "\t{:}".format(data[i]['text'])
-		if verbose: print ('\tQ{:} identified as Fill_In_the_Blank'.format(Qid))	
-		QuestionTypes['FIB'] += 1
-		return
-
-	if start == end:	# T/F question
+	BoldCount = 0	#count number of bold answers. 1 = M/C, 2+ Error
+	MAT_start = 0	#Matching answer start position
+	if end != start:
+		for i in range(start+1,end+1):	# range does not include the end value, so +1 is needed
+			if data[i]['allBold']: 
+				BoldCount += 1
+			if MAT_start == 0 and data[i]['outline'] > data[start+1]['outline']:
+				MAT_start = i
+ 
+	# T/F question
+	if start == end:
 		if data[start]['trueBold'] and data[start]['falseBold']:
 			print_Warning ("skipped T/F question with both answeres in bold. (Q#{:})\n\t{:}...".format(Qid,data[start]['text'][:(TextWidth-15)]))
 			QuestionTypes['Warning'] += 1
 		elif data[start]['trueBold']:
-			Qtxt = data[start]['text'].replace('( True / False )','').replace('True / False','')
+			Qtxt = re.sub('\([ ]*True[ ]*/[ ]*False[ ]*\)','',data[start]['text']).strip(' ')
 			BBtext += "\nTF\t{:}\ttrue".format(Qtxt)
 			if verbose: print ('\tQ{:} identified as True/False'.format(Qid))
 			QuestionTypes['T/F'] += 1
 		elif data[start]['falseBold']:
-			Qtxt = data[start]['text'].replace('( True / False )','').replace('True / False','')
+			Qtxt = re.sub('\([ ]*True[ ]*/[ ]*False[ ]*\)','',data[start]['text']).strip(' ')
 			BBtext += "\nTF\t{:}\tfalse".format(Qtxt)
 			if verbose: print ('\tQ{:} identified as True/False'.format(Qid))
 			QuestionTypes['T/F'] += 1
@@ -256,25 +274,15 @@ def make_Q(Qid, start, end):
 			QuestionTypes['Warning'] += 1
 		return
 
-	if start+1 == end:	# Essay question
+	# Essay question
+	if BoldCount == 0 and start+1 == end:	
 			BBtext += "\nESS\t{:}\t{:}".format(data[start]['text'],data[end]['text'])
 			if verbose: print ('\tQ{:} identified as Essay'.format(Qid))
 			QuestionTypes['ESSAY'] += 1
 			return
 
-	BoldCount = 0	#count number of bold answers. 1 = M/C, 2+ MAT
-	RegCount = 0	#count number of regular answers
-	RegEndPos = -1
-	BoldStartPos = 99999
-	for i in range(start+1,end+1):	# range does not include the end value, so +1 is needed
-		if data[i]['allBold']: 
-			BoldCount += 1
-			if i < BoldStartPos: BoldStartPos = i
-		else:
-			RegCount += 1
-			if i > RegEndPos: RegEndPos = i
- 
-	if BoldCount == 1:	# M/C question
+	# M/C question
+	if BoldCount == 1:	
 		BBtext += "\nMC\t{:}".format(data[start]['text'])
 		for i in range(start+1,end+1): # range does not include the end value, so +1 is needed
 			if data[i]['allBold']: 	answer = 'correct'
@@ -284,16 +292,28 @@ def make_Q(Qid, start, end):
 		QuestionTypes['M/C'] += 1
 		return
 
-	if BoldCount > 1 and BoldStartPos>RegEndPos:	# Matching question
-		if BoldCount == RegCount and end-start == BoldCount+RegCount: # inclusive of end:start (so total count is end-start+1)
+	# Matching question
+	n=0
+	if BoldCount == 0 and MAT_start != 0:
+		if (end - start)%2 == 0: # equal number of sentences and terms
 			BBtext += "\nMAT\t{:}".format(data[start]['text'])
-			for i in range(start+1,start+BoldCount+1): # range does not include the end value, so +1 is needed
-				BBtext += "\t{:}\t{:}".format(data[i]['text'],data[i+BoldCount]['text'])
+			for i in range(start+1,MAT_start):
+				BBtext += "\t{:}\t{:}".format(data[start+1+n]['text'],data[MAT_start+n]['text'])
+				n += 1
 			if verbose: print ('\tQ{:} identified as Matching'.format(Qid))
 			QuestionTypes['MAT'] += 1
 		else:
 			print_Warning ("skipped matching question with unequal count of sentances and terms. (Q#{:})\n\tterms:{:}, sentances:{:}\n\t{:}...".format(Qid,BoldCount,end-start-1-BoldCount,data[start]['text'][:(TextWidth-15)]))
 			QuestionTypes['Warning'] += 1
+		return
+
+	# Fill In the Blank question
+	if BoldCount == 0 and re.search('_{5,}',data[start]['text']) != None:	
+		BBtext += "\nFIB\t{:}".format(data[start]['text'])
+		for i in range(start+1,end+1): # range does not include the end value, so +1 is needed
+			BBtext += "\t{:}".format(data[i]['text'])
+		if verbose: print ('\tQ{:} identified as Fill_In_the_Blank'.format(Qid))	
+		QuestionTypes['FIB'] += 1
 		return
 
 	print_Warning ("couldn't identify question type, skipping: (Q#{:}, best guess: ESS or M/C)\n\t{:}...".format(Qid,data[start]['text'][:(TextWidth-15)]))
@@ -322,23 +342,14 @@ def u2a(txt):
 			print_Warning ("found {:} unhandled unicode at {:}".format(found_val,found_pos)) 
 	return val
 
-def isList(style):
-	""" recursevely go through style and base styles to check if it is list paragraph"""
-	if style == None:
-		return False
-	elif str(style).find('List Paragraph') != -1:
-		return True
-	else:
-		return isList(style.base_style)
-
 def	print_data_table(title):
 	print ('\n{:}'.format(title))
-	print ('        out    left \tall \ttrue\tfalse\tis        ') 
-	print (' #   Q  line  indent\tBold\tBold\tBold \tlist\ttext') 
-	print ('~~~ ~~~ ~~~~  ~~~~~~\t~~~~\t~~~~\t~~~~~\t~~~~\t~~~~') 
+	print ('        out   all  true  false is') 
+	print (' #   Q  line  Bold Bold  Bold  list  text') 
+	print ('~~~ ~~~ ~~~~ ~~~~~ ~~~~~ ~~~~~ ~~~~~ ~~~~') 
 	i = 1
 	for d in data:
-		print ("{:3} {:3} {:4}  {:6}\t{:}\t{:}\t{:}\t{:}\t{:}".format(i,d['Q'],d['outline'],d['left_indent'],d['allBold'],d['trueBold'],d['falseBold'],d['list'],d['text'][:(TextWidth-56)])) 
+		print ("{:3} {:3} {:4} {:5} {:5} {:5} {:5} {:}".format(i,d['Q'],d['outline'],str(d['allBold']),str(d['trueBold']),str(d['falseBold']),str(d['list']),d['text'][:(TextWidth-37)])) 
 		i += 1
 
 ### print to console string with any kind of encoding ####################################

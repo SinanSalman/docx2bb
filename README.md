@@ -42,11 +42,11 @@ Example:
 
 The question identification logic is as follows:
 
-* if question includes five consecutive ‘_’ characters; it is identified as Fill_in_the_Blank
-* if question does not have any sub-bullets; it is identified as True/False
+* if question has no sub-bullets; it is identified as True/False
 * if question has only one sub-bullet; it is identified as Essay
-* if question has multiple sub-bullets, but only one is in bold; it is identified as Multiple choice
-* if question has multiple sub-bullets, and more than one are in bold; it is identified as Matching
+* if question has multiple sub-bullets, but only one is in bold; it is identified as Multiple choice. If a blank is needed in the question use (4) consecutive ‘_’ characters (to avoid being identified as FIB)
+* if question has multiple sub-bullets, split evenly between second-level and third-level outline, and none of which are bold; it is identified as Matching
+* if question includes (5) or more consecutive ‘_’ characters and no bold answers; it is identified as Fill_in_the_Blank
 
 ## Disclaimer: ##
 docx2bb is provided with no warranties, use it if you find it useful. docx2bb was designed
