@@ -32,9 +32,9 @@ options:
 --help		|	-h		display help message
 
 ## Docx Formatting and Question Identification Logic: ##
-docx2bb requires the use of a simple word format in all questions types to be recognized; specifically, all questions must use an **OUTLINE NUMBERED LIST** format, where questions are listed using level 1 outline and answers use level 2 outline; Any unnumbered paragraph will be ignored by the tool. Key answers for questions (except for Essay and Fill_in_the_Blnak) must be selected using **bold** font. 
+docx2bb requires the use of a simple word format in all questions types to be recognized; specifically, all questions must use an **OUTLINE NUMBERED LIST** format, where questions are listed using level 1 outline and answers use level 2 outline (MAT uses level 3); Any unnumbered paragraph will be ignored by the tool. Key answers for M/C and T/F questions must be selected using **bold** font. 
 
-Example:
+Essay example:
 
 	1. Question
 
@@ -49,8 +49,6 @@ The question identification logic is as follows:
 * if question includes (5) or more consecutive ‘_’ characters and no bold answers; it is identified as Fill_in_the_Blank
 
 ## Disclaimer: ##
-docx2bb is provided with no warranties, use it if you find it useful. docx2bb was designed
-to keep your *.docx exam unchanged, but the author assumes no liabilities from use or 
-misuse of this tool, including if it eats your exam/hw.
+docx2bb is provided with no warranties, use it if you find it useful. docx2bb is designed to keep your *.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your exam :).
 
 Code by Sinan Salman, 2016
