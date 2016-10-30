@@ -317,7 +317,7 @@ def make_Q(Qid, start, end):
 	# Matching question
 	n=0
 	if BoldCount == 0 and MAT_start != 0:
-		if (end - start)%2 == 0: # equal number of sentences and terms
+		if (end - start)%2 == 0 and MAT_start - start - 1 == end - MAT_start +1 : # equal number of sentences and terms
 			BBtext += "\nMAT\t{:}".format(data[start]['text'])
 			for i in range(start+1,MAT_start):
 				BBtext += "\t{:}\t{:}".format(data[start+1+n]['text'],data[MAT_start+n]['text'])
@@ -325,7 +325,7 @@ def make_Q(Qid, start, end):
 			if verbose: print ('\tQ{:} identified as Matching'.format(Qid))
 			QuestionTypes['MAT'] += 1
 		else:
-			print_Warning ("skipped matching question with unequal count of sentances and terms. (Q#{:})\n\tterms:{:}, sentances:{:}\n\t{:}...".format(Qid,BoldCount,end-start-1-BoldCount,data[start]['text'][:(TextWidth-15)]))
+			print_Warning ("skipped matching question with unequal count of sentances and terms. (Q#{:})\n\tterms:{:}, sentances:{:}\n\t{:}...".format(Qid,MAT_start-start-1,end-MAT_start+1,data[start]['text'][:(TextWidth-15)]))
 			QuestionTypes['Warning'] += 1
 		return
 
