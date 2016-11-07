@@ -23,7 +23,8 @@ Code by Sinan Salman, 2016
 
 Version History:
 27.10.16	0.10	inital release on bitbucket
-29.10.16	0.11	fixed outline level identification issue
+29.10.16	0.11	fix outline level identification issue
+07.11.16	0.12	add PageBreak elimination logic, fix line id reporting in verbose, and made T/F RegEx substitution case insensitive
 """
 
 HELP_MSG = """Options:
@@ -46,8 +47,8 @@ Windows platforms:
 		
 __app__ = 		"docx2bb.py"
 __author__ = 	"Sinan Salman (sinan.salman[at]gmail.com)"
-__version__ = 	"v0.11"
-__date__ = 		"Oct 29, 2016"
+__version__ = 	"v0.12"
+__date__ = 		"Nov 07, 2016"
 __copyright__ = "Copyright (c)2016 Sinan Salman"
 __license__ = 	"GPLv3"
 __website__	=	"https://bitbucket.org/sinansalman/docx2bb"
@@ -140,9 +141,11 @@ def RunScript():
 
 	# extract data from docx file
 	global Data
+	n=0
 	if verbose: print ("Found {:} paragraphs, parsing and converting unicode to ascii...".format(len(doc.paragraphs)))
 	for p in doc.paragraphs:
-		temp={'text':u2a(p.text),'outline':0,'allBold':False,'trueBold':False,'falseBold':False,'list':False}
+		n += 1
+		temp={'No':0,'text':u2a(p.text),'outline':0,'allBold':False,'trueBold':False,'falseBold':False,'list':False}
 		bold = True
 		for r in p.runs:
 			if r.bold == None: bold = False
@@ -151,6 +154,7 @@ def RunScript():
 		temp['allBold'] = bold
 		temp['list'], temp['outline'] = GetListOutline(p)
 		temp['Q'] = 0
+		temp['No'] = n
 		data.append(temp)
 		
 	# print data object for debugging
@@ -161,7 +165,7 @@ def RunScript():
 		print ('~~~ ~~~~ ~~~~~ ~~~~') 
 		i = 1
 		for d in data:
-			print ("{:3} {:4} {:5} {:}".format(i,d['outline'],str(d['list']),d['text'][:(TextWidth-15)])) 
+			print ("{:3} {:4} {:5} {:}".format(d['No'],d['outline'],str(d['list']),d['text'][:(TextWidth-15)])) 
 			i += 1
 
 	if verbose:	print ('\nClean up:')	
@@ -172,9 +176,20 @@ def RunScript():
 			empty_p.append(i)
 	if empty_p != []:
 		if verbose:
-			print ('Removing {:} empty line(s): {:}'.format(len(empty_p),[x+1 for x in empty_p]))	
+			print ('Removing {:} empty line(s): {:}'.format(len(empty_p),[data[x]['No'] for x in empty_p]))	
 		for i in reversed(range(len(empty_p))): # go backward to delete lines without missing up the index
 			del data[empty_p[i]]
+
+	# delete pagebreaks
+	PageBreak = []
+	for i in range(len(data)):
+		if re.search('^\s*\n+$',data[i]['text']):
+			PageBreak.append(i)
+	if PageBreak != []:
+		if verbose:
+			print ('Removing {:} pagebreak(s) at: {:}'.format(len(PageBreak),[data[x]['No'] for x in PageBreak]))	
+		for i in reversed(range(len(PageBreak))): # go backward to delete lines without missing up the index
+			del data[PageBreak[i]]
 
 	# delete non-list paragraphs
 	nonlist_p = []
@@ -183,7 +198,7 @@ def RunScript():
 			nonlist_p.append(i)
 	if nonlist_p != []:
 		if verbose:
-			print ('Removing {:} none-list line(s): {:}'.format(len(nonlist_p),[x+1 for x in nonlist_p]))	
+			print ('Removing {:} none-list line(s): {:}'.format(len(nonlist_p),[data[x]['No'] for x in nonlist_p]))	
 		for i in reversed(range(len(nonlist_p))): # go backward to delete lines without missing up the index
 			del data[nonlist_p[i]]
 
@@ -211,7 +226,7 @@ def RunScript():
 		print ('~~~ ~~~ ~~~~ ~~~~~ ~~~~~ ~~~~~ ~~~~~ ~~~~') 
 		i = 1
 		for d in data:
-			print ("{:3} {:3} {:4} {:5} {:5} {:5} {:5} {:}".format(i,d['Q'],d['outline'],str(d['allBold']),str(d['trueBold']),str(d['falseBold']),str(d['list']),d['text'][:(TextWidth-37)])) 
+			print ("{:3} {:3} {:4} {:5} {:5} {:5} {:5} {:}".format(d['No'],d['Q'],d['outline'],str(d['allBold']),str(d['trueBold']),str(d['falseBold']),str(d['list']),d['text'][:(TextWidth-37)])) 
 			i += 1
 	if len(Qbeg_pos) != len(Qend_pos): print_Fail ("problem in parsing question lines.\n\tQ_begin_positions:\t{:}\n\tQ_end_positions:\t{:}".format(Qbeg_pos,Qend_pos))
 
@@ -282,12 +297,12 @@ def make_Q(Qid, start, end):
 			print_Warning ("skipped T/F question with both answeres in bold. (Q#{:})\n\t{:}...".format(Qid,data[start]['text'][:(TextWidth-15)]))
 			QuestionTypes['Warning'] += 1
 		elif data[start]['trueBold']:
-			Qtxt = re.sub('\([ ]*True[ ]*/[ ]*False[ ]*\)','',data[start]['text']).strip(' ')
+			Qtxt = re.sub('\([ ]*True[ ]*/[ ]*False[ ]*\)','',data[start]['text'],flags=re.IGNORECASE).strip(' ')
 			BBtext += "\nTF\t{:}\ttrue".format(Qtxt)
 			if verbose: print ('\tQ{:} identified as True/False'.format(Qid))
 			QuestionTypes['T/F'] += 1
 		elif data[start]['falseBold']:
-			Qtxt = re.sub('\([ ]*True[ ]*/[ ]*False[ ]*\)','',data[start]['text']).strip(' ')
+			Qtxt = re.sub('\([ ]*True[ ]*/[ ]*False[ ]*\)','',data[start]['text'],flags=re.IGNORECASE).strip(' ')
 			BBtext += "\nTF\t{:}\tfalse".format(Qtxt)
 			if verbose: print ('\tQ{:} identified as True/False'.format(Qid))
 			QuestionTypes['T/F'] += 1
