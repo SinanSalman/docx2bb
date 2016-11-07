@@ -48,6 +48,9 @@ The question identification logic is as follows:
 * if question has multiple sub-bullets, split evenly between second-level and third-level outline, and none of which are bold; it is identified as Matching
 * if question includes (5) or more consecutive ‘_’ characters and no bold answers; it is identified as Fill_in_the_Blank
 
+## Version and History ##
+docx2bb version and version history are included in docx2bb.py file header info.
+
 ## Disclaimer: ##
 docx2bb is provided with no warranties, use it if you find it useful. docx2bb is designed to keep your *.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your exam :).
 
