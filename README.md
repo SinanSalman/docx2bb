@@ -10,7 +10,7 @@ Create BlackBoard (bb) test questions (text) import file from a Microsoft Word *
 Download docx2bb:
 
 * required file: docx2bb.py
-* optional file: docx2bb.json
+* optional file: docx2bb.json [if you choose to change the default unicode2ascii behavior]
 
 In addition to a working python environment, docx2bb requires python-docx and lxml libraries. 
 To install these libraries, follow the below steps:

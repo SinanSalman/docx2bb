@@ -25,6 +25,7 @@ Version History:
 27.10.16	0.10	inital release on bitbucket
 29.10.16	0.11	fix outline level identification issue
 07.11.16	0.12	add PageBreak elimination logic, fix line id reporting in verbose, and made T/F RegEx substitution case insensitive
+17.11.16	0.13	add default values for unicode2ascii replacements even if docx2bb.jason file is absent
 """
 
 HELP_MSG = """Options:
@@ -47,8 +48,8 @@ Windows platforms:
 		
 __app__ = 		"docx2bb.py"
 __author__ = 	"Sinan Salman (sinan.salman[at]gmail.com)"
-__version__ = 	"v0.12"
-__date__ = 		"Nov 07, 2016"
+__version__ = 	"v0.13"
+__date__ = 		"Nov 17, 2016"
 __copyright__ = "Copyright (c)2016 Sinan Salman"
 __license__ = 	"GPLv3"
 __website__	=	"https://bitbucket.org/sinansalman/docx2bb"
@@ -61,7 +62,8 @@ import sys
 import platform
         
 verbose = False
-unicode2ascii = {'rules':None,'notallowed':None}
+unicode2ascii = {'rules':{'“':'"','”':'"','‘':"'",'’':"'",'–':'-'}, 
+				 'notallowed':'[^a-zA-Z0-9 §±!@#$%^&*()\\-_=+[\\]{};:\'\"\\\\|<>,./?`~\\n]'}
 WordFileName = ""
 data = []
 BBtext = ""
@@ -121,6 +123,8 @@ def ProcessCLI():
 	if os.path.isfile('docx2bb.json'):
 		with open('docx2bb.json',encoding='utf-8') as jsonfile:
 			unicode2ascii = json.load(jsonfile)
+			if verbose:
+				print ("*** Option: using docx2bb.json file")
 	
 ### Analyze Document and Convert to BB Text Format #######################################
 
@@ -361,15 +365,15 @@ def u2a(txt):
 	
 	val = txt
 	printed = False
-	if unicode2ascii["rules"] != None:
-		for k,v in unicode2ascii["rules"].items():
-			if verbose and txt.find(k) != -1:
+	for k,v in unicode2ascii["rules"].items():
+		if txt.find(k) != -1:
+			if verbose:
 				if not printed:
 					printed = True
 					print_to_console ("\t{:}...".format(txt[:(TextWidth-15)]))
 				print_to_console ("\t\tconverted {:} to {:}".format(k,v))
 			val = val.replace(k,v)
-	if verbose and unicode2ascii["notallowed"] != None:
+	if verbose:
 		found_itr = re.finditer(unicode2ascii["notallowed"],val)
 		found_pos = [m.start()+1 for m in found_itr]
 		found_val = [txt[m-1] for m in found_pos]
