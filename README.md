@@ -4,7 +4,7 @@
 **docx2bb**
 
 ## Overview: ##
-*docx2bb* is a tool for creating BlackBoard (bb) questions upload file (\*.txt) from a MS-word questions document (\*.docx). Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. **ExamFormat-Sample.docx** provides a sample exam format for use with docx2bb; the critical requirement for the word document is to format all questions and answers using an **outline numbered list** format. More detailed description of the required format and question identification logic can be found below. 
+**docx2bb** is a tool for creating BlackBoard (bb) questions upload file (\*.txt) from a MS-word questions document (\*.docx). Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. **ExamFormat-Sample.docx** provides a sample exam format for use with docx2bb; the critical requirement for the word document is to format all questions and answers using an **outline numbered list** format. More detailed description of the required format and question identification logic can be found below. 
 
 ## Downloading docx2bb: ##
 Choose one of the below described files depending on your computing environment:
@@ -36,7 +36,7 @@ If you choose to use the python code directly (not the binary), you'll need a wo
 * Install python-docx library: pip install python-docx
 
 ## Unicode-to-ASCII replacement rules: ##
-Optionally, Unicode-to-ASCII replacement rules can be changed by downloading and modifying the '*docx2bb.json*' data file. Default replacement rules will be used if no such file is found in the local folder.
+Optionally, Unicode-to-ASCII replacement rules can be changed by downloading and modifying the '**docx2bb.json**' data file. Default replacement rules will be used if no such file is found in the local folder.
 
 ## Docx Formatting and Question Identification Logic: ##
 docx2bb requires the use of a simple word format for questions types to be recognized; specifically, all questions must use an **OUTLINE NUMBERED LIST** format, where questions are listed using level 1 outline and answers use level 2 outline (MAT uses level 3); Any unnumbered paragraph will be ignored by the tool. Key answers for M/C and T/F questions must be selected using **bold** font. 
@@ -62,6 +62,6 @@ docx2bb version and version history are included in docx2bb.py file header.
 docx2bb is licensed under GPLv3.0 which can be accessed at https://www.gnu.org/licenses/gpl-3.0.en.html
 
 ## Disclaimer: ##
-docx2bb is provided with no warranties, use it if you find it useful. docx2bb is designed to keep your *.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your homework/exam :).
+docx2bb is provided with no warranties, use it if you find it useful. docx2bb is designed to keep your \*.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your homework/exam :).
 
 Code by Sinan Salman, 2016
