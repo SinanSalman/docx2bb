@@ -4,7 +4,7 @@
 **docx2bb**
 
 ## Overview: ##
-Create BlackBoard (bb) test questions (\*.txt) upload file from a Microsoft Word (\*.docx) test document. Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. ExamFormat-Sample.docx provides a sample exam format for use with docx2bb; the critical requirement for the word document is to format all questions and answers as an **outline numbered list**. More detailed description of the question identification logic can be found below. 
+Create BlackBoard (bb) test questions (\*.txt) upload file from a Microsoft Word (\*.docx) test document. Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. **ExamFormat-Sample.docx** provides a sample exam format for use with docx2bb; the critical requirement for the word document is to format all questions and answers as an **outline numbered list**. More detailed description of the question identification logic can be found below. 
 
 ## Downloading docx2bb: ##
 Choose one of the below described files depending on your computing environment:
@@ -54,7 +54,7 @@ The question identification logic is as follows:
 * if question has only one sub-bullet; it is identified as Essay.
 * if question has multiple sub-bullets, but only one is in bold; it is identified as Multiple choice. If a blank is needed in the question use (4) consecutive '_' characters (to avoid being identified as FIB).
 * if question has multiple sub-bullets, split evenly between second-level and third-level outline, and none of which are bold; it is identified as Matching.
-* if question includes (5) or more consecutive â€˜_â€™ characters and no bold answers; it is identified as Fill_in_the_Blank. Multiple possible answers are allowed in this type.
+* if question includes (5) or more consecutive ‘_’ characters and no bold answers; it is identified as Fill_in_the_Blank. Multiple possible answers are allowed in this type.
 
 ## Version and History ##
 docx2bb version and version history are included in docx2bb.py file header info.
