@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 """
@@ -9,6 +9,8 @@ in the blank. ExamFormat-Sample.docx shows a sample exam format for use with doc
 Unicode-to-ASCII replacement rules from 'docx2bb.json' data file can be optionally applied.
 
 Syntax:
+    docx2bb [options] [docx_filename]
+or
     python docx2bb.py [options] [docx_filename]
 options:
 	--verbose | -v display verbose messages
@@ -17,7 +19,7 @@ options:
 Disclaimer:
 docx2bb is provided with no warranties, use it if you find it useful. docx2bb is designed to 
 keep your *.docx document unchanged, but the author assumes no liabilities from use of 
-this tool, including if it eats your exam :).
+this tool, including if it eats your exam ;).
 
 Code by Sinan Salman, 2016
 
@@ -26,6 +28,7 @@ Version History:
 29.10.16	0.11	fix outline level identification issue
 07.11.16	0.12	add PageBreak elimination logic, fix line id reporting in verbose, and made T/F RegEx substitution case insensitive
 17.11.16	0.13	add default values for unicode2ascii replacements even if docx2bb.jason file is absent
+29.11.16	0.14	fixed minor py2.7 file open compatibility issue (JSON). Cleanup in prep for pyinstall packaging
 """
 
 HELP_MSG = """Options:
@@ -46,10 +49,10 @@ Windows platforms:
 		pip install python-docx
 """
 		
-__app__ = 		"docx2bb.py"
+__app__ = 		"docx2bb"
 __author__ = 	"Sinan Salman (sinan.salman[at]gmail.com)"
-__version__ = 	"v0.13"
-__date__ = 		"Nov 17, 2016"
+__version__ = 	"v0.14"
+__date__ = 		"Nov 29, 2016"
 __copyright__ = "Copyright (c)2016 Sinan Salman"
 __license__ = 	"GPLv3"
 __website__	=	"https://bitbucket.org/sinansalman/docx2bb"
@@ -57,9 +60,9 @@ __website__	=	"https://bitbucket.org/sinansalman/docx2bb"
 ### Initialization #######################################################################
 
 import re
+import platform
 import os
 import sys
-import platform
         
 verbose = False
 unicode2ascii = {'rules':{'“':'"','”':'"','‘':"'",'’':"'",'–':'-'}, 
@@ -106,25 +109,28 @@ def ProcessCLI():
 	
 	# handle arguments and load settings from JSON file
 	if len(sys.argv) == 1:
-		print ("Syntax:\n\tpython docx2bb.py [options] [docx_filename]")
+		print ("Syntax:\n\tdocx2bb [options] [docx_filename]\n\tpython docx2bb.py [options] [docx_filename]")
 		print (HELP_MSG)
 		print_Fail ("Missing argument")
 	if '--verbose' in sys.argv or '-v' in sys.argv:
 		print ("*** Option: verbose mode")
 		verbose = True
 	if '--help' in sys.argv or '-h' in sys.argv:
-		print("Syntax:\n\tpython docx2bb.py [options] [docx_filename]")
-		print(HELP_MSG)
+		print ("Syntax:\n\tdocx2bb [options] [docx_filename]\n\tpython docx2bb.py [options] [docx_filename]")
+		print (HELP_MSG)
 		sys.exit(0)
 	WordFileName = sys.argv[-1]
 	if not os.path.isfile(WordFileName):
 		print_Fail ("can't find file: {:}. Make sure [docx_filename] is the last argument.".format(WordFileName))
 	import json
 	if os.path.isfile('docx2bb.json'):
-		with open('docx2bb.json',encoding='utf-8') as jsonfile:
-			unicode2ascii = json.load(jsonfile)
-			if verbose:
-				print ("*** Option: using docx2bb.json file")
+		if sys.version_info[0] == 2:
+			jsonfile = open('docx2bb.json')
+		else:
+			jsonfile = open('docx2bb.json',encoding="utf8")
+		unicode2ascii = json.load(jsonfile)
+		if verbose:
+			print ("*** Option: using docx2bb.json file")
 	
 ### Analyze Document and Convert to BB Text Format #######################################
 
@@ -135,7 +141,7 @@ def RunScript():
 	try:
 		import docx
 	except ImportError as e:
-		print ("Please install python-docx library first using:")
+		print ("Error importing library. If using docx2bb.py directly please install [python-docx] first using:")
 		print (INSTALL_MSG)
 		sys.exit(0)
 
