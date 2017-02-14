@@ -21,7 +21,7 @@ docx2bb is provided with no warranties, use it if you find it useful. docx2bb is
 keep your *.docx document unchanged, but the author assumes no liabilities from use of 
 this tool, including if it eats your exam ;).
 
-Code by Sinan Salman, 2016
+Code by Sinan Salman, 2016-2017
 
 Version History:
 27.10.16	0.10	inital release on bitbucket
@@ -29,6 +29,7 @@ Version History:
 07.11.16	0.12	add PageBreak elimination logic, fix line id reporting in verbose, and made T/F RegEx substitution case insensitive
 17.11.16	0.13	add default values for unicode2ascii replacements even if docx2bb.jason file is absent
 29.11.16	0.14	fixed minor py2.7 file open compatibility issue (JSON). Cleanup in prep for pyinstall packaging
+13.02.17	0.15	fixed Q beg/end bug
 """
 
 HELP_MSG = """Options:
@@ -51,9 +52,9 @@ Windows platforms:
 		
 __app__ = 		"docx2bb"
 __author__ = 	"Sinan Salman (sinan.salman[at]gmail.com)"
-__version__ = 	"v0.14"
-__date__ = 		"Nov 29, 2016"
-__copyright__ = "Copyright (c)2016 Sinan Salman"
+__version__ = 	"v0.15"
+__date__ = 		"Feb 12, 2017"
+__copyright__ = "Copyright (c)2016-2017 Sinan Salman"
 __license__ = 	"GPLv3"
 __website__	=	"https://bitbucket.org/sinansalman/docx2bb"
 
@@ -217,7 +218,7 @@ def RunScript():
 	Qend_pos = []
 	Qid = 1
 	data[0]['Q'] = Qid
-	for i in range(1, len(data)-1):
+	for i in range(1, len(data)):
 		if data[Qbeg_pos[-1]]['outline'] < data[i]['outline']:
 			data[i]['Q'] = Qid
 		else:
@@ -225,8 +226,7 @@ def RunScript():
 			Qbeg_pos.append(i)
 			Qid += 1
 			data[i]['Q'] = Qid
-	Qend_pos.append(len(data)-1) 
-	data[-1]['Q'] = Qid
+	Qend_pos.append(i)
 
 	# print data object for debugging
 	if verbose: 
@@ -234,10 +234,8 @@ def RunScript():
 		print ('        out   all  true  false is') 
 		print (' #   Q  line  Bold Bold  Bold  list  text') 
 		print ('~~~ ~~~ ~~~~ ~~~~~ ~~~~~ ~~~~~ ~~~~~ ~~~~') 
-		i = 1
 		for d in data:
 			print ("{:3} {:3} {:4} {:5} {:5} {:5} {:5} {:}".format(d['No'],d['Q'],d['outline'],str(d['allBold']),str(d['trueBold']),str(d['falseBold']),str(d['list']),d['text'][:(TextWidth-37)])) 
-			i += 1
 	if len(Qbeg_pos) != len(Qend_pos): print_Fail ("problem in parsing question lines.\n\tQ_begin_positions:\t{:}\n\tQ_end_positions:\t{:}".format(Qbeg_pos,Qend_pos))
 
 	# convert to Blackboard import file format
