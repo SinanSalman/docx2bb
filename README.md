@@ -7,7 +7,7 @@
 **docx2bb** is a tool for creating BlackBoard (bb) questions upload file (\*.txt) from a MS-word questions document (\*.docx). Supported question types are: True/False (T/F), Multiple choice (M/C), Matching (MAT), Essay (ESS), and (simple) Fill in the blank (FIB). **ExamFormat-Sample.docx** provides a sample exam format for use with docx2bb; the critical requirement for the word document is to format all questions and answers using an **outline numbered list** format. More detailed description of the required format and question identification logic can be found below. 
 
 ## Downloading docx2bb: ##
-Choose one of the below described files depending on your computing environment:
+Choose one of the below files depending on your computing environment (click on the file name, and then click on "view raw" to download):
 
 * docx2bb		(OSX binary)
 * docx2bb.exe	(Windows binary)
