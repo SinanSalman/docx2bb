@@ -30,6 +30,7 @@ Version History:
 17.11.16	0.13	add default values for unicode2ascii replacements even if docx2bb.jason file is absent
 29.11.16	0.14	fixed minor py2.7 file open compatibility issue (JSON). Cleanup in prep for pyinstall packaging
 13.02.17	0.15	fixed Q beg/end bug
+07.03.17	0.16	added tabs and ... to the list of replaced characters
 """
 
 HELP_MSG = """Options:
@@ -52,8 +53,8 @@ Windows platforms:
 		
 __app__ = 		"docx2bb"
 __author__ = 	"Sinan Salman (sinan.salman[at]gmail.com)"
-__version__ = 	"v0.15"
-__date__ = 		"Feb 12, 2017"
+__version__ = 	"v0.16"
+__date__ = 		"Mar 07, 2017"
 __copyright__ = "Copyright (c)2016-2017 Sinan Salman"
 __license__ = 	"GPLv3"
 __website__	=	"https://bitbucket.org/sinansalman/docx2bb"
@@ -66,7 +67,7 @@ import os
 import sys
         
 verbose = False
-unicode2ascii = {'rules':{'“':'"','”':'"','‘':"'",'’':"'",'–':'-'}, 
+unicode2ascii = {'rules':{'“':'"','”':'"','‘':"'",'’':"'",'–':'-','…':'...','\t':'   '}, 
 				 'notallowed':'[^a-zA-Z0-9 §±!@#$%^&*()\\-_=+[\\]{};:\'\"\\\\|<>,./?`~\\n]'}
 WordFileName = ""
 data = []
@@ -377,14 +378,13 @@ def u2a(txt):
 					print_to_console ("\t{:}...".format(txt[:(TextWidth-15)]))
 				print_to_console ("\t\tconverted {:} to {:}".format(k,v))
 			val = val.replace(k,v)
-	if verbose:
-		found_itr = re.finditer(unicode2ascii["notallowed"],val)
-		found_pos = [m.start()+1 for m in found_itr]
-		found_val = [txt[m-1] for m in found_pos]
-		if found_pos != []:
-			if not printed:
-				print_to_console ("\t{:}...".format(txt[:(TextWidth-15)]))
-			print_Warning ("found {:} unhandled unicode at {:}".format(found_val,found_pos)) 
+	found_itr = re.finditer(unicode2ascii["notallowed"],val)
+	found_pos = [m.start()+1 for m in found_itr]
+	found_val = [txt[m-1] for m in found_pos]
+	if found_pos != []:
+		if not printed:
+			print_to_console ("\t{:}...".format(txt[:(TextWidth-15)]))
+		print_Warning ("found {:} unhandled unicode at position(s) {:}".format(found_val,found_pos)) 
 	return val
 
 ### print to console string with any kind of encoding ####################################

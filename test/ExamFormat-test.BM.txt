@@ -5,4 +5,6 @@ MC	Multiple choice question can have between 3-5 bullet points, with the entire 
 MAT	Matching questions must use the following bullet point outlining, which also provides the correct answer for each term:	Statement explaining term A	Term A	Definition of Term B	Term B	Meaning of Term C	Term C	Description of Term D	Term D
 ESS	Essay/short answer question.	Key solution for essay or short answer question (must fit in exactly one bullet point)
 ESS	The below line is for testing Unicode characters:	§ ± ! @ # $ % ^ & * ( ) - _ = + [ { ] } ; : 'test' "test" test's \ | ` ~ , < . > / ?
+ESS	line with tabs      in between	key solution
+ESS	line with ... in the text	key solution
 TF	testing T/F questions at the end of an exam (Q beg/end bug)	true
