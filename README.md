@@ -54,7 +54,7 @@ docx2bb is released under the GPLv3 license, which is available at [GNU](https:/
 *   Mar 07th, 2017	0.16	added tabs and ... to the list of replaced characters
 *   Feb 13th, 2017	0.15	fixed Q beg/end bug
 *   Nov 29th, 2016	0.14	fixed minor py2.7 file open compatibility issue (JSON). Cleanup in prep for pyinstall packaging
-Nov 17th, 2016	0.13	add default values for unicode2ascii replacements even if docx2bb.jason file is absent
+*   Nov 17th, 2016	0.13	add default values for unicode2ascii replacements even if docx2bb.jason file is absent
 *   Nov 07th, 2016	0.12	add PageBreak elimination logic, fix line id reporting in verbose, and made T/F RegEx substitution case insensitive
 *   Oct 29th, 2016	0.11	fix outline level identification issue
 *   Oct 27th, 2016	0.10	initial release on bitbucket
