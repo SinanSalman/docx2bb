@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Server Adminstration</h2><br>
+  <div class="mainmenu">
+     <a href="{{ url_for('shutdown') }}">Shutdown server</a>
+     <a href="{{ url_for('reset_secret') }}">Reset secret key</a>
+     <a href="{{ url_for('admin_server') }}">Refresh Log</a>
+     <a href="{{ url_for('start_new_log') }}">Start a new Log</a>
+  </div>
+  <br>
+  <div><pre>{{ log }}</pre></div>
+{% endblock %}

@@ -1,0 +1,29 @@
+body     { font-family: sans-serif; }
+a, h1, h2
+         { color: #377ba8; }
+h1, h2   { font-family: 'Georgia', serif; margin: 0; }
+h1       { font-size: 3vw; border-bottom: 0.25vw solid #eee; }
+h2       { font-size: 2vw; }
+input,span, pre
+         { font-size:1.25vw; }
+
+.about   { font-size: 1.5vw; font-family: serif; width: 60vw; }
+.about_a { text-align: right; color: grey; vertical-align: top; padding: 0.5vw; }
+.about_b { text-align: justify; vertical-align: top; padding: 0.5vw; }
+
+.page    { margin: 0.5vw auto; width: 95vw; border: 0.5vw solid #ccc; padding: 1vw;
+            background: white; }
+.metanav { font-size: 1.5vw; text-align: right; padding-bottom: 0.75vw; }
+.flash   { font-size: 1.5vw; background: #cee5F5; padding: 1vw; border: 0.5vw solid #aacbe2; }
+
+.mainmenu
+         { font-size: 1.5vw;  }
+.mainmenu a
+         { background-color: #eee; color: black; display: inline; padding: 2vw;
+           text-decoration: none; text-align: right; }
+.mainmenu a:hover
+         { background-color: #ccc; }
+.mainmenu a.active
+         { background-color: #4CAF50; color: white; }
+#debug_text
+         { display: none; }

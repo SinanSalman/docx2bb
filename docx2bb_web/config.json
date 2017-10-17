@@ -1,0 +1,7 @@
+{
+   "STATEFILE":"statefile.dat",
+   "LOGFILE":"web_activity.log",
+   "USERNAME":"admin",
+   "PASSWORD":"admin",
+   "RESULTS_LIFE_TIME":60
+}

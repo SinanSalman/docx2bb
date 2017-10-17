@@ -1,67 +1,65 @@
 # README #
 
+## OVERVIEW ##
+docx2bb is a tool for creating BlackBoard (bb) test questions (text) import file from a Microsoft Word \*.docx document. Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. ExamFormat-Sample.docx shows a sample exam format for use with docx2bb. Unicode-to-ASCII replacement rules from 'docx2bb.json' data file can be optionally applied.
 
-**docx2bb**
+docx2bb includes three components:
 
-## Overview: ##
-**docx2bb** is a tool for creating BlackBoard (bb) questions upload file (\*.txt) from a MS-word questions document (\*.docx). Supported question types are: True/False (T/F), Multiple choice (M/C), Matching (MAT), Essay (ESS), and (simple) Fill in the blank (FIB). **ExamFormat-Sample.docx** provides a sample exam format for use with docx2bb; the critical requirement for the word document is to format all questions and answers using an **outline numbered list** format. More detailed description of the required format and question identification logic can be found below. 
+* docx2bb_lib - library including the conversion logic
+* docx2bb     - command line interface (cli)
+* docx2bb_web - website interface
 
-## Downloading docx2bb: ##
-Choose one of the below files depending on your computing environment (click on the file name, and then click on "view raw" to download):
+An important design principle for docx2bb was that it's input (MS-word docx) file must not look different from a key solution exam. this way a specifically prepared exam key solution document can be processed by docx2bb and a import text file results, reducing the number of steps and files necessary to manage the exam automation process.
 
-* docx2bb		(OSX binary)
-* docx2bb.exe	(Windows binary)
-* docx2bb.py	(python code, see below for the python environment requirements)
-
-## Syntax: ##
-		docx2bb [options] [docx_filename]
-			OR
-		python docx2bb.py [options] [docx_filename]
-
+Syntax:
+    docx2bb [options] [docx_filename]
+or
+    python docx2bb.py [options] [docx_filename]
 options:
+	--verbose | -v display verbose messages
+	--help | -h display help message
 
-		--verbose	|	-v		display verbose messages
-		--help		|	-h		display help message
+## Installation ##
+docx2bb can be installed as a python3 package:
 
-## Python Environment Requirements: ##
+* Download the project's repository using the downloads section on left side of this page
+* Unzip the downloaded file on your hard drive and rename the resulting folder to 'docx2bb'
+* install the python package and start it using the following code:
 
-If you choose to use the python code directly (not the binary), you'll need a working python environment as well as python-docx and lxml libraries. To install these libraries, on top of a python environment follow the below steps:
+The following was tested on OSX with a new anaconda environment initialized to python 3.6:
 
-### OSX and Linux: ###
-* pip install python-docx
+```
+pip install ./docx2bb
+cd docx2bb
+./srart.sh
+```
 
-### Windows platforms: ###
-* Download lxml library wheel from http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml
-* Install lxml library: pip install [downloadedfile]
-* Install python-docx library: pip install python-docx
+Windows installation and use was not tested but should follow similar steps.
 
-## Unicode-to-ASCII replacement rules: ##
-Optionally, Unicode-to-ASCII replacement rules can be changed by downloading and modifying the '**docx2bb.json**' data file. Default replacement rules will be used if no such file is found in the local folder.
+## SOURCE CODE ##
+The source distribution contains Python, JavaScript, CSS, HTML code. The code also makes use of several libraries including Python-Flask, jQuery, and docx.
 
-## Docx Formatting and Question Identification Logic: ##
-docx2bb requires the use of a simple word format for questions types to be recognized; specifically, all questions must use an **OUTLINE NUMBERED LIST** format, where questions are listed using level 1 outline and answers use level 2 outline (MAT uses level 3); Any unnumbered paragraph will be ignored by the tool. Key answers for M/C and T/F questions must be selected using **bold** font. 
+## CONTRIBUTE	##
+Code submissions are greatly appreciated and highly encouraged. Please send fixes, enhancements, etc. to sinan[dot]salman[at]zu.ac.
 
-Essay example:
+## LICENSE	##
+docx2bb is released under the GPLv3 license, which is available at [GNU](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-	1. Question
+## Disclaimer ##
+docx2bb is provided with no warranties, use it if you find it useful. docx2bb is designed to
+keep your \*.docx document unchanged, but the author assumes no liabilities from use of
+this tool, including if it eats your exam ;).
 
-		a. Answer
-
-The question identification logic is as follows:
-
-* if question has no sub-bullets; it is identified as True/False.
-* if question has only one sub-bullet; it is identified as Essay.
-* if question has multiple sub-bullets, but only one is in bold; it is identified as Multiple choice. If a blank is needed in the question use (4) consecutive '_' characters (to avoid being identified as FIB).
-* if question has multiple sub-bullets, split evenly between second-level and third-level outline, and none of which are bold; it is identified as Matching.
-* if question includes (5) or more consecutive '_' characters and no bold answers; it is identified as Fill_in_the_Blank. Multiple possible answers are allowed in this type.
+## COPYRIGHT	##
+2016-2017 Sinan Salman, PhD
 
 ## Version and History ##
-docx2bb version and version history are included in docx2bb.py file header.
-
-## License: ##
-docx2bb is licensed under GPLv3.0 which can be accessed at https://www.gnu.org/licenses/gpl-3.0.en.html
-
-## Disclaimer: ##
-docx2bb is provided with no warranties, use it if you find it useful. docx2bb is designed to keep your \*.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your homework/exam :).
-
-Code by Sinan Salman, 2016
+Sep 28th, 2017	0.20	Initial web interface release
+Sep 20th, 2017  0.17  fixed bug with single answer FIB identified as ESS
+Mar 07th, 2017	0.16	added tabs and ... to the list of replaced characters
+Feb 13th, 2017	0.15	fixed Q beg/end bug
+Nov 29th, 2016	0.14	fixed minor py2.7 file open compatibility issue (JSON). Cleanup in prep for pyinstall packaging
+Nov 17th, 2016	0.13	add default values for unicode2ascii replacements even if docx2bb.jason file is absent
+Nov 07th, 2016	0.12	add PageBreak elimination logic, fix line id reporting in verbose, and made T/F RegEx substitution case insensitive
+Oct 29th, 2016	0.11	fix outline level identification issue
+Oct 27th, 2016	0.10	initial release on bitbucket

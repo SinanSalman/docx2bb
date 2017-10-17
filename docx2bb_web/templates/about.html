@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div class=about>
+    <table>
+      <tr>
+        <td class=about_a>ABOUT</td>
+        <td class=about_b>docx2bb is a tool for creating BlackBoard (bb) test questions
+           (text) import file from a Microsoft Word document (*.docx). Supported question
+           types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill
+           in the blank. <a href="{{ url_for('static', filename='ExamFormat-Sample.docx') }}">ExamFormat-Sample.docx</a>
+           shows a sample exam format for use with docx2bb.
+           An important design principle for docx2bb is that it's input (MS-word docx)
+           file must not look different from a key solution exam. This way a specifically
+           prepared exam key solution document can be processed by docx2bb and a import
+           text file results, reducing the number of steps and files necessary to manage
+           the exam automation process.
+        </td>
+      </tr>
+      <tr>
+        <td class=about_a>SOURCE CODE</td>
+        <td class=about_b>docx2bb source code and additional information can be found at
+          its bitbucket <a href="https://bitbucket.org/sinansalman/docx2bb">website</a>.
+        </td>
+      </tr>
+      <tr>
+        <td class=about_a>CONTRIBUTE</td>
+        <td class=about_b>Code submissions are greatly appreciated and highly encouraged.
+          Please send fixes, enhancements, etc. to sinan[dot]salman[at]zu.ac.ae</td>
+      </tr>
+      <tr>
+        <td class=about_a>LICENSE</td>
+        <td class=about_b>docx2bb is released under the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPLv3</a> license.</td>
+      </tr>
+      <tr>
+        <td class=about_a>COPYRIGHT</td>
+        <td class=about_b>2016-2017 Sinan Salman, PhD</td>
+      </tr>
+    </table>
+  </div>
+{% endblock %}

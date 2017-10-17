@@ -1,0 +1,2 @@
+graft docx2bb_web/templates
+graft docx2bb_web/static

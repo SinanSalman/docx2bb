@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block body %}
+<script type=text/javascript> function ToggleFunction(id) { document.getElementById(id).style.display = document.getElementById(id).style.display == '' ? 'block' : ''; } </script>
+<div class="mainmenu">
+  <a href="{{ url_for('about') }}">About</a>
+  <a href="{{ url_for('tutorial') }}">Tutorial</a>
+</div>
+  <br><br><h2>Select MS-Word (*.docx) file to convert:</h2><br>
+  <form enctype=multipart/form-data action="{{ url_for('load_docx') }}" method=post>
+    <input type=file accept=".docx" value='Select file...' name=filename autofocus="autofocus">
+    <input type=submit value=upload>
+  </form>
+  {% if output.info %}
+      <pre>{{ output.info }}</pre>
+  {% endif %}
+  {% if output.result %}
+     <span>You have {{ output.lifetime }} seconds to download the converted file:</span><br><br><br>
+     <div class="mainmenu">
+        <a href="{{ url_for('download_txt') }}">Download converted file</a>
+        <a onclick="ToggleFunction('debug_text')" href="#">Show/hide details</a>
+     </div>
+     <br><br>
+  {% endif %}
+  {% if output.debug %}
+      <pre id=debug_text>{{ output.debug }}</pre>
+  {% endif %}
+{% endblock %}
