@@ -1,23 +1,15 @@
 # README #
 
-## OVERVIEW ##
-**docx2bb** is a tool for creating BlackBoard (bb) test questions (text) import file from a Microsoft Word \*.docx document. Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. ExamFormat-Sample.docx shows a sample exam format for use with docx2bb. Unicode-to-ASCII replacement rules from 'docx2bb.json' data file can be optionally applied.
+## Overview ##
+**docx2bb** is a tool for creating BlackBoard (bb) test questions (text) import file from a Microsoft Word \*.docx document. Supported question types are: True/False, Multiple choice, Matching, Essay, and (simple) Fill in the blank. ExamFormat-Sample.docx shows a sample exam format for use with **docx2bb**. Unicode-to-ASCII replacement rules from 'docx2bb.json' data file can be optionally applied.
 
-docx2bb includes three components:
+**docx2bb** includes three components:
 
 *   docx2bb_lib - library including the conversion logic
 *   docx2bb     - command line interface (cli)
 *   docx2bb_web - website interface
 
-An important design principle for docx2bb was that it's input (MS-word docx) file must not look different from a key solution exam. this way a specifically prepared exam key solution document can be processed by docx2bb and a import text file results, reducing the number of steps and files necessary to manage the exam automation process.
-
-'''
-Syntax:
-   python docx2bb.py \[options\] \[docx_filename\]
-options:
-   --verbose | -v display verbose messages
-   --help | -h display help message
-'''
+An important design principle for **docx2bb** was that it's input (MS-word docx) file must not look different from a key solution exam. this way a specifically prepared exam key solution document can be processed by **docx2bb** and a import text file results, reducing the number of steps and files necessary to manage the exam automation process.
 
 ## Installation ##
 **docx2bb** can be installed as a python3 package:
@@ -33,19 +25,19 @@ pip install .
 ./srart.sh
 ```
 
-## SOURCE CODE ##
+## Source Code ##
 The source distribution contains Python, JavaScript, CSS, HTML code. The code also makes use of several libraries including Python-Flask, jQuery, and python-docx.
 
-## CONTRIBUTE	##
+## Contribute ##
 Code submissions are greatly appreciated and highly encouraged. Please send fixes, enhancements, etc. to SinanSalman at GitHub or sinan\[dot\]salman\[at\]zu\[dot\]ac\[dot\]ae.
 
-## LICENSE	##
-docx2bb is released under the GPLv3 license, which is available at [GNU](https://www.gnu.org/licenses/gpl-3.0.en.html)
+## License ##
+**docx2bb** is released under the GPLv3 license, which is available at [GNU](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ## Disclaimer ##
-**docx2bb** is provided with no warranties, use it if you find it useful. docx2bb is designed to keep your \*.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your exam ;).
+**docx2bb** is provided with no warranties, use it if you find it useful. **docx2bb** is designed to keep your \*.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your exam ;).
 
-## COPYRIGHT ##
+## Copyright ##
 2016-2017 Sinan Salman, PhD
 
 ## Version and History ##
