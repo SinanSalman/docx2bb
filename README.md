@@ -41,7 +41,7 @@ Code submissions are greatly appreciated and highly encouraged. Please send fixe
 2016-2017 Sinan Salman, PhD
 
 ## Version and History ##
-*   Sep 28th, 2017	0.20	Initial web interface release
+*   Sep 28th, 2017	0.20	Initial web interface release and move to github
 *   Sep 20th, 2017 0.17  fixed bug with single answer FIB identified as ESS
 *   Mar 07th, 2017	0.16	added tabs and ... to the list of replaced characters
 *   Feb 13th, 2017	0.15	fixed Q beg/end bug
