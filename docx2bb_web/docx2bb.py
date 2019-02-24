@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 docx2bb:
 Create BlackBoard (bb) test questions (text) import file from a Microsoft Word *.docx document.
@@ -26,10 +26,10 @@ HELP_MSG = """Options:
 """
 
 INSTALL_MSG = """
-OSX and Linux:
+OSX, Linux, and Windows:
 	pip install python-docx
 
-Windows platforms:
+If missing lxml library on Windows platforms:
 	Download lxml library wheel:
 		http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml
 	Install lxml library:
@@ -40,9 +40,9 @@ Windows platforms:
 
 __app__ = "docx2bb"
 __author__ = "Sinan Salman (sinan[dot]]salman[at]gmail[dot]com)"
-__version__ = "v0.20"
-__date__ = "Oct 5, 2017"
-__copyright__ = "Copyright (c)2016-2017 Sinan Salman"
+__version__ = "v0.21"
+__date__ = "Feb 24, 2019"
+__copyright__ = "Copyright (c)2016-2019 Sinan Salman"
 __license__ = "GPLv3"
 __website__ = "https://bitbucket.org/sinansalman/docx2bb"
 

@@ -38,11 +38,12 @@ Code submissions are greatly appreciated and highly encouraged. Please send fixe
 **docx2bb** is provided with no warranties, use it if you find it useful. **docx2bb** is designed to keep your \*.docx document unchanged, but the author assumes no liabilities from use of this tool, including if it eats your exam ;).
 
 ## Copyright ##
-2016-2017 Sinan Salman, PhD
+2016-2019 Sinan Salman, PhD
 
 ## Version and History ##
-*   Sep 28th, 2017	0.20	Initial web interface release and move to github
-*   Sep 20th, 2017 0.17  fixed bug with single answer FIB identified as ESS
+*   Feb 24th, 2019	0.21	changed shebang to #!/usr/bin/env python to use python in $PATH 
+*   Sep 28th, 2017	0.20	initial web interface release and move to github
+*   Sep 20th, 2017  0.17    fixed bug with single answer FIB identified as ESS
 *   Mar 07th, 2017	0.16	added tabs and ... to the list of replaced characters
 *   Feb 13th, 2017	0.15	fixed Q beg/end bug
 *   Nov 29th, 2016	0.14	fixed minor py2.7 file open compatibility issue (JSON). Cleanup in prep for pyinstall packaging
