@@ -44,7 +44,7 @@ __version__ = "v0.21"
 __date__ = "Feb 24, 2019"
 __copyright__ = "Copyright (c)2016-2019 Sinan Salman"
 __license__ = "GPLv3"
-__website__ = "https://bitbucket.org/sinansalman/docx2bb"
+__website__ = "https://sinansalman.github.io/docx2bb/"
 
 import os
 import sys
